@@ -34,16 +34,20 @@ Background bg;
 FlameMgr flameMgr;
 Treasure treasure;
 HPDisplay hpDisplay;
+Bullet bullet;
 
 boolean isMovingUp;
 boolean isMovingDown;
 boolean isMovingLeft;
 boolean isMovingRight;
 
+
 int time;
 int wait = 4000;
 
-
+int shootCount=-1;
+int numFire=5;
+Bullet[] bullets = new Bullet[numFire];
 
 void setup () {
 	size(640, 480);
@@ -52,6 +56,9 @@ void setup () {
 	treasure = new Treasure();
 	hpDisplay = new HPDisplay();
 	fighter = new Fighter(20);
+  
+   
+   
 }
 
 void draw()
@@ -64,7 +71,7 @@ void draw()
 		treasure.draw();
 		flameMgr.draw();
 		fighter.draw();
-
+         
 		//enemys
 		if(millis() - time >= wait){
 			addEnemy(currentType++);
@@ -75,7 +82,7 @@ void draw()
 			if (enemys[i]!= null) {
 				enemys[i].move();
 				enemys[i].draw();
-				if (enemys[i].isCollideWithFighter()) {
+			if (enemys[i].isCollideWithFighter() ) {
 					fighter.hpValueChange(-20);
 					flameMgr.addFlame(enemys[i].x, enemys[i].y);
 					enemys[i]=null;
@@ -85,12 +92,14 @@ void draw()
 				}
 			}
 		}
-		// 這地方應該加入Fighter 血量顯示UI
-		
+
+           hpDisplay.updateWithFighterHP(fighter.hp);
+           
 	}
 	else if (state == GameState.END) {
 		bg.draw();
 	}
+   
 }
 boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh)
 {
@@ -119,10 +128,11 @@ void keyReleased(){
     default :break ;
   }
   if (key == ' ') {
-  	if (state == GameState.PLAYING) {
-		fighter.shoot();
+  
+	fighter.shoot();
+   
 	}
-  }
+  
   if (key == ENTER) {
     switch(state) {
       case GameState.START:
@@ -136,4 +146,3 @@ void keyReleased(){
     }
   }
 }
-
