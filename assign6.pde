@@ -142,6 +142,7 @@ void keyReleased(){
 		flameMgr = new FlameMgr();
 		treasure = new Treasure();
 		fighter = new Fighter(20);
+		currentType = EnemysShowingType.STRAIGHT;
       default : break ;
     }
   }
